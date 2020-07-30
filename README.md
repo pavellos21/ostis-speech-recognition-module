@@ -23,6 +23,10 @@ Install `pip3` before. For this use:
 
     sudo apt install python3-pip
 
+If you have problems with `pyaudio` try:
+
+    sudo apt install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0
+
 ---
 
 Installation
