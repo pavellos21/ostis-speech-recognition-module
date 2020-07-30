@@ -8,8 +8,8 @@
 #pragma once
 
 #include "sc-memory/sc_module.hpp"
-#include "hwService.hpp"
-#include "hwModule.generated.hpp"
+#include "SpeechRecognitionService.hpp"
+#include "SpeechRecognitionModule.generated.hpp"
 
 
 class SpeechRecognitionModule : public ScModule
@@ -21,5 +21,5 @@ class SpeechRecognitionModule : public ScModule
   virtual sc_result ShutdownImpl() override;
 
 private:
-  std::unique_ptr<SpeechRecognitionPythonService> m_hwService;
+  std::unique_ptr<SpeechRecognitionPythonService> m_SpeechRecognitionService;
 };

@@ -4,20 +4,20 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
-#include "hwModule.hpp"
+#include "SpeechRecognitionModule.hpp"
 
 SC_IMPLEMENT_MODULE(SpeechRecognitionModule)
 
 sc_result SpeechRecognitionModule::InitializeImpl()
 {
-  m_hwService.reset(new SpeechRecognitionPythonService("SpeechRecognitionModule/SpeechRecognitionModule.py"));
-  m_hwService->Run();
+  m_SpeechRecognitionService.reset(new SpeechRecognitionPythonService("SpeechRecognitionModule/SpeechRecognitionModule.py"));
+  m_SpeechRecognitionService->Run();
   return SC_RESULT_OK;
 }
 
 sc_result SpeechRecognitionModule::ShutdownImpl()
 {
-  m_hwService->Stop();
-  m_hwService.reset();
+  m_SpeechRecognitionService->Stop();
+  m_SpeechRecognitionService.reset();
   return SC_RESULT_OK;
 }
