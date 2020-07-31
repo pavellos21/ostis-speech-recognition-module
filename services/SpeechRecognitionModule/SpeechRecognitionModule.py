@@ -125,5 +125,5 @@ class SpeechRecognitionModule(ScModule):
         print('Shutting down Recogn module')
 
 
-# module = SpeechRecognitionModule()
-# module.Run()
+module = SpeechRecognitionModule()
+module.Run()

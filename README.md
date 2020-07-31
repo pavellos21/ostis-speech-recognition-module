@@ -32,6 +32,10 @@ If you have problems with `pyaudio` try:
 Installation
 ------------
 
-Add this line to CMakeLists.txt:
+Add this lines to `CMakeLists.txt`:
 
 	add_subdirectory(SpeechRecognitionModule)
+
+    if (${SC_BUILD_TESTS})
+        add_subdirectory(SRMTest)
+    endif ()
