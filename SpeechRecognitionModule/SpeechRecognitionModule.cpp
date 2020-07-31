@@ -11,6 +11,7 @@ SC_IMPLEMENT_MODULE(SpeechRecognitionModule)
 sc_result SpeechRecognitionModule::InitializeImpl()
 {
   m_SpeechRecognitionService.reset(new SpeechRecognitionPythonService("SpeechRecognitionModule/SpeechRecognitionModule.py"));
+  // m_SpeechRecognitionService.reset(new SpeechRecognitionPythonService("SpeechRecognitionModule/test/test.py"));
   m_SpeechRecognitionService->Run();
   return SC_RESULT_OK;
 }

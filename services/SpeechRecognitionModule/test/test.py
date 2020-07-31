@@ -1,5 +1,4 @@
-from SpeechRecognitionModule.speech2text import recognise_file, recognise_mic
-from SpeechRecognitionModule.SpeechRecognitionModule import gen_template
+from SpeechRecognitionModule.SpeechRecognitionModule import gen_template, recognise_file
 from os import path
 from unittest import defaultTestLoader, TestLoader, TestCase, TextTestRunner
 
@@ -13,17 +12,12 @@ class TestSpeech2Text(TestCase):
     def test_audio_file(self):
         self.assertEqual(recognise_file(AUDIO_FILE, lang='en'), '123')
 
-    def test_microphone(self):
-        print('Say "one-two-three" after "Talk" instruction')
-        self.assertEqual(recognise_mic(lang='en'), '123')
-
 
 class TestTemplateGen(TestCase):
-    def test_gen(self):
+    def test_template_generation(self):
         ctx = TestTemplateGen.MemoryCtx()
 
         text = recognise_file(AUDIO_FILE, lang='en')
-        gen_template(ctx, text)
 
         nrel_sc_text_translation_addr = ctx.HelperResolveSystemIdtf(
             'nrel_sc_text_translation', ScType.NodeConstNoRole)
@@ -57,8 +51,40 @@ class TestTemplateGen(TestCase):
             ScType.EdgeAccessVarPosPerm,
             '_message_name'
         )
+        
+        gen_template(ctx, None)
+        self.assertEqual(ctx.HelperSearchTemplate(templ).Size(), 0)
 
+        gen_template(ctx, text)
         self.assertNotEqual(ctx.HelperSearchTemplate(templ).Size(), 0)
+
+        templ = ScTemplate()
+
+        templ.TripleWithRelation(
+            ScType.NodeVar >> '_temp',
+            ScType.EdgeDCommonVar,
+            ScType.NodeVar >> '_message',
+            ScType.EdgeAccessVarPosPerm,
+            nrel_sc_text_translation_addr
+        )
+
+        templ.Triple(
+            '_temp',
+            ScType.EdgeAccessVarPosPerm,
+            ScType.LinkVar >> '_link'
+        )
+
+        templ.Triple(
+            concept_message_addr,
+            ScType.EdgeAccessVarPosPerm,
+            '_message'
+        )
+
+        search_result = ctx.HelperSearchTemplate(templ)
+        link_index = search_result.Aliases()['_link']
+        search_item = search_result[0]
+
+        self.assertEqual(ctx.GetLinkContent(search_item[link_index]).AsString(), text)
 
 
 def MemoryCtx() -> ScMemoryContext:
